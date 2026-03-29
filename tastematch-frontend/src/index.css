@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-secondary antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white px-6 py-2 rounded-full font-semibold transition-all hover:bg-primary-dark shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center gap-2;
+  }
+  .btn-secondary {
+    @apply bg-white border border-gray-200 text-secondary px-6 py-2 rounded-full font-semibold transition-all hover:border-primary hover:text-primary shadow-sm hover:shadow active:scale-95 flex items-center justify-center gap-2 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative overflow-hidden dark:bg-slate-900 dark:border-slate-800;
+  }
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50/50 transition-colors dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100;
+  }
+}
+
+/* Custom scrollbar matching premium vibes */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
