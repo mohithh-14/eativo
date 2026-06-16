@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaArrowRight, FaMapMarkerAlt, FaRobot, FaSearch, FaUtensils } from 'react-icons/fa';
+import { FaArrowRight, FaMapMarkerAlt, FaRobot, FaSearch, FaUtensils, FaMagic } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import RestaurantCard from '../components/RestaurantCard';
 import restaurants from '../data/restaurants';
@@ -34,7 +34,7 @@ const Home = () => {
 
         <div className="container relative z-10 mx-auto grid items-center gap-12 px-6 lg:grid-cols-2">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-2xl">
-            <span className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary dark:bg-primary/20">
+            <span className="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 px-4 py-2 text-sm font-semibold text-primary dark:from-primary/25 dark:to-accent/25">
               Hyderabad-first food discovery
             </span>
             <h1 className="mb-6 text-5xl font-bold leading-tight text-secondary dark:text-white lg:text-7xl">
@@ -49,7 +49,8 @@ const Home = () => {
               <Link to="/restaurants" className="btn-secondary py-3 dark:border-slate-700 dark:bg-slate-900 dark:text-white">
                 All restaurants
               </Link>
-              <Link to="/recommendations" className="btn-primary py-3">
+              <Link to="/recommendations" className="btn-gold py-3">
+                <FaMagic />
                 Personalized recommendations
               </Link>
             </div>

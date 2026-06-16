@@ -13,7 +13,12 @@ module.exports = {
           light: '#ff7b7f'
         },
         secondary: '#222222',
-        accent: '#f5a623',
+        accent: '#dfb743',
+        gold: {
+          light: '#f4e39b',
+          DEFAULT: '#dfb743',
+          dark: '#b68e22'
+        },
         background: '#f8f8f8'
       },
       fontFamily: {

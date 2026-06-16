@@ -261,7 +261,7 @@ const TasteProfile = () => {
                 </div>
               </div>
 
-              <button type="submit" disabled={loading} className="btn-primary mt-8 w-full py-4 text-lg disabled:cursor-not-allowed disabled:opacity-70">
+              <button type="submit" disabled={loading} className="btn-gold mt-8 w-full py-4 text-lg disabled:cursor-not-allowed disabled:opacity-70">
                 {loading ? <FaSpinner className="text-2xl animate-spin" /> : 'See personalized recommendations'}
               </button>
             </form>

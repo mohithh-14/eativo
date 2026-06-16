@@ -108,7 +108,7 @@ const Recommendations = () => {
                 We rank local restaurants using your saved taste profile when you are signed in, then blend that with Hyderabad-specific restaurant pages and menus.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link to="/profile" className="btn-primary py-3">
+                <Link to="/profile" className="btn-gold py-3">
                   <FaSlidersH />
                   Update taste profile
                 </Link>

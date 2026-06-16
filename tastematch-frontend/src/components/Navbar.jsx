@@ -55,7 +55,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
     <nav className={`fixed z-50 w-full transition-all duration-300 ${isScrolled ? 'bg-white/95 py-3 shadow-sm backdrop-blur-md dark:bg-slate-950/95 dark:shadow-slate-950/20' : 'bg-transparent py-5'}`}>
       <div className="container mx-auto px-6 lg:px-12 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="bg-primary text-white p-2 rounded-xl group-hover:rotate-12 transition-transform">
+          <div className="bg-gradient-to-tr from-primary to-accent text-white p-2 rounded-xl group-hover:rotate-12 transition-transform shadow-md shadow-primary/10">
             <FaHamburger size={24} />
           </div>
           <span className={`text-2xl font-bold tracking-tight ${!isTransparent ? 'text-secondary dark:text-white' : 'text-white'}`}>
