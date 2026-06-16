@@ -91,17 +91,26 @@ const Home = () => {
                 className="h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute bottom-10 left-8 max-w-xs rounded-3xl bg-white/90 p-5 shadow-xl backdrop-blur dark:bg-slate-900/90"
-              >
-                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600">
-                  <FaRobot />
-                </div>
-                <p className="text-sm font-bold text-secondary dark:text-white">AI order copilot</p>
-                <p className="mt-1 text-sm text-gray-500 dark:text-slate-300">Ask for a spicy combo, quick dinner for two, or cancel a placed order from the menu page.</p>
-              </motion.div>
+              <Link to="/restaurants">
+                <motion.div
+                  whileHover={{ scale: 1.03, y: -5 }}
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ 
+                    y: { duration: 4, repeat: Infinity, ease: 'easeInOut' },
+                    scale: { duration: 0.2 }
+                  }}
+                  className="absolute bottom-10 right-8 max-w-xs rounded-3xl bg-white/90 p-5 shadow-xl backdrop-blur border border-transparent hover:border-accent/20 cursor-pointer dark:bg-slate-900/90 dark:hover:border-accent/30"
+                >
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-accent/15 text-accent">
+                    <FaRobot />
+                  </div>
+                  <p className="text-sm font-bold text-secondary dark:text-white flex items-center justify-between gap-2">
+                    <span>AI order copilot</span>
+                    <span className="text-[9px] bg-accent/20 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-full uppercase tracking-wider font-extrabold">Try Now</span>
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed text-gray-500 dark:text-slate-300">Click to explore restaurants, view any menu, and ask Eativo AI to build or modify your order in real-time.</p>
+                </motion.div>
+              </Link>
             </div>
           </motion.div>
         </div>
