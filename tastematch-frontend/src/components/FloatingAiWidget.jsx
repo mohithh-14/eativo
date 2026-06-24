@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaRobot, FaPaperPlane, FaShoppingBasket, 
@@ -32,7 +31,6 @@ const FloatingAiWidget = () => {
   const [showBasket, setShowBasket] = useState(false);
 
   const messagesEndRef = useRef(null);
-  const location = useLocation();
   const currentUser = getCurrentUser();
 
 

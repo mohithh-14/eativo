@@ -5,7 +5,6 @@ import { FaArrowRight, FaMagic, FaSlidersH, FaSpinner } from 'react-icons/fa';
 import RestaurantCard from '../components/RestaurantCard';
 import { apiFetch } from '../config/api';
 import {
-  clearPersistedTasteProfile,
   getCurrentUser,
   getStoredTasteProfile,
   normalizeTasteProfile,
