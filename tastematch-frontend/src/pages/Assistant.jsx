@@ -387,14 +387,14 @@ const Assistant = () => {
     setRestaurants(mockRestaurants);
 
     const mockMenuItems = [
-      { id: 1001, name: 'Butter Chicken', description: 'Tender chicken in a rich, creamy spiced tomato sauce.', price: 16.99, category: 'Main Course', restaurantId: 101, restaurantName: 'Spice Garden' },
-      { id: 1002, name: 'Garlic Naan', description: 'Freshly baked leavened flatbread topped with garlic and butter.', price: 3.99, category: 'Bread', restaurantId: 101, restaurantName: 'Spice Garden' },
-      { id: 1003, name: 'Penne Arrabbiata', description: 'Spicy pasta dish made with garlic, tomatoes, and dried red chili peppers.', price: 14.50, category: 'Main Course', restaurantId: 102, restaurantName: 'Pasta Palace' },
-      { id: 1004, name: 'Truffle Mushroom Risotto', description: 'Creamy arborio rice infused with wild mushrooms and white truffle oil.', price: 19.99, category: 'Main Course', restaurantId: 102, restaurantName: 'Pasta Palace' },
-      { id: 1005, name: 'Classic Cheeseburger', description: 'Grilled angus beef patty, cheddar, lettuce, tomato, house sauce, brioche bun.', price: 11.99, category: 'Burgers', restaurantId: 103, restaurantName: 'Burger Bistro' },
-      { id: 1006, name: 'Loaded Truffle Fries', description: 'Crispy golden fries tossed in truffle salt, parmesan, and parsley.', price: 6.50, category: 'Sides', restaurantId: 103, restaurantName: 'Burger Bistro' },
-      { id: 1007, name: 'Salmon Sashimi (5pcs)', description: 'Slices of premium raw Atlantic salmon, served with wasabi.', price: 15.00, category: 'Sashimi', restaurantId: 104, restaurantName: 'Sushi Zen' },
-      { id: 1008, name: 'Dragon Roll', description: 'Eel and cucumber roll inside, topped with avocado and sweet eel sauce.', price: 17.50, category: 'Special Rolls', restaurantId: 104, restaurantName: 'Sushi Zen' }
+      { id: 1001, name: 'Butter Chicken', description: 'Tender chicken in a rich, creamy spiced tomato sauce.', price: 16.99, category: 'Main Course', restaurantId: 101, restaurantName: 'Spice Garden', restaurantCuisine: 'Indian' },
+      { id: 1002, name: 'Garlic Naan', description: 'Freshly baked leavened flatbread topped with garlic and butter.', price: 3.99, category: 'Bread', restaurantId: 101, restaurantName: 'Spice Garden', restaurantCuisine: 'Indian' },
+      { id: 1003, name: 'Penne Arrabbiata', description: 'Spicy pasta dish made with garlic, tomatoes, and dried red chili peppers.', price: 14.50, category: 'Main Course', restaurantId: 102, restaurantName: 'Pasta Palace', restaurantCuisine: 'Italian' },
+      { id: 1004, name: 'Truffle Mushroom Risotto', description: 'Creamy arborio rice infused with wild mushrooms and white truffle oil.', price: 19.99, category: 'Main Course', restaurantId: 102, restaurantName: 'Pasta Palace', restaurantCuisine: 'Italian' },
+      { id: 1005, name: 'Classic Cheeseburger', description: 'Grilled angus beef patty, cheddar, lettuce, tomato, house sauce, brioche bun.', price: 11.99, category: 'Burgers', restaurantId: 103, restaurantName: 'Burger Bistro', restaurantCuisine: 'American' },
+      { id: 1006, name: 'Loaded Truffle Fries', description: 'Crispy golden fries tossed in truffle salt, parmesan, and parsley.', price: 6.50, category: 'Sides', restaurantId: 103, restaurantName: 'Burger Bistro', restaurantCuisine: 'American' },
+      { id: 1007, name: 'Salmon Sashimi (5pcs)', description: 'Slices of premium raw Atlantic salmon, served with wasabi.', price: 15.00, category: 'Sashimi', restaurantId: 104, restaurantName: 'Sushi Zen', restaurantCuisine: 'Japanese' },
+      { id: 1008, name: 'Dragon Roll', description: 'Eel and cucumber roll inside, topped with avocado and sweet eel sauce.', price: 17.50, category: 'Special Rolls', restaurantId: 104, restaurantName: 'Sushi Zen', restaurantCuisine: 'Japanese' }
     ];
     setMenuCache(mockMenuItems);
     setBotState('idle');
@@ -766,22 +766,32 @@ const Assistant = () => {
           item.name.toLowerCase().includes('penne') || 
           item.name.toLowerCase().includes('risotto')
         );
-      } else if (lower.includes('indian') || lower.includes('chicken') || lower.includes('curry') || lower.includes('naan')) {
+      } else if (lower.includes('indian') || lower.includes('chicken') || lower.includes('curry') || lower.includes('naan') || lower.includes('biryani')) {
         criteria = 'Indian cuisine';
         matches = menuCache.filter(item => 
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('indian')) ||
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('hyderabadi')) ||
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('mughlai')) ||
           item.restaurantName.toLowerCase().includes('spice') || 
+          item.restaurantName.toLowerCase().includes('biryani') || 
+          item.restaurantName.toLowerCase().includes('mehfil') || 
           item.name.toLowerCase().includes('chicken') || 
-          item.name.toLowerCase().includes('naan')
+          item.name.toLowerCase().includes('naan') ||
+          item.name.toLowerCase().includes('biryani') ||
+          item.name.toLowerCase().includes('haleem') ||
+          item.description.toLowerCase().includes('masala')
         );
       } else if (lower.includes('burger') || lower.includes('fries') || lower.includes('american')) {
         criteria = 'burger & fries';
         matches = menuCache.filter(item => 
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('american')) ||
           item.name.toLowerCase().includes('burger') || 
           item.name.toLowerCase().includes('fries')
         );
       } else if (lower.includes('sushi') || lower.includes('salmon') || lower.includes('japanese') || lower.includes('sashimi')) {
         criteria = 'sushi & sashimi';
         matches = menuCache.filter(item => 
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('japanese')) ||
           item.name.toLowerCase().includes('roll') || 
           item.name.toLowerCase().includes('sashimi') ||
           item.restaurantName.toLowerCase().includes('sushi')

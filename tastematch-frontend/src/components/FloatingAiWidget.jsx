@@ -62,7 +62,8 @@ const FloatingAiWidget = () => {
                 return menuData.map(item => ({
                   ...item,
                   restaurantName: rest.name,
-                  restaurantId: rest.id
+                  restaurantId: rest.id,
+                  restaurantCuisine: rest.cuisine
                 }));
               }
             } catch (err) {
@@ -90,12 +91,12 @@ const FloatingAiWidget = () => {
 
   const loadMockData = () => {
     const mockMenuItems = [
-      { id: 1001, name: 'Butter Chicken', description: 'Tender chicken in a rich, creamy spiced tomato sauce.', price: 16.99, category: 'Main Course', restaurantId: 101, restaurantName: 'Spice Garden' },
-      { id: 1002, name: 'Garlic Naan', description: 'Freshly baked leavened flatbread topped with garlic and butter.', price: 3.99, category: 'Bread', restaurantId: 101, restaurantName: 'Spice Garden' },
-      { id: 1003, name: 'Penne Arrabbiata', description: 'Spicy pasta dish made with garlic, tomatoes, and dried red chili peppers.', price: 14.50, category: 'Main Course', restaurantId: 102, restaurantName: 'Pasta Palace' },
-      { id: 1004, name: 'Truffle Mushroom Risotto', description: 'Creamy arborio rice infused with wild mushrooms and white truffle oil.', price: 19.99, category: 'Main Course', restaurantId: 102, restaurantName: 'Pasta Palace' },
-      { id: 1005, name: 'Classic Cheeseburger', description: 'Grilled beef patty, cheddar, lettuce, tomato, house sauce.', price: 11.99, category: 'Burgers', restaurantId: 103, restaurantName: 'Burger Bistro' },
-      { id: 1007, name: 'Salmon Sashimi (5pcs)', description: 'Slices of premium raw Atlantic salmon, served with wasabi.', price: 15.00, category: 'Sashimi', restaurantId: 104, restaurantName: 'Sushi Zen' }
+      { id: 1001, name: 'Butter Chicken', description: 'Tender chicken in a rich, creamy spiced tomato sauce.', price: 16.99, category: 'Main Course', restaurantId: 101, restaurantName: 'Spice Garden', restaurantCuisine: 'Indian' },
+      { id: 1002, name: 'Garlic Naan', description: 'Freshly baked leavened flatbread topped with garlic and butter.', price: 3.99, category: 'Bread', restaurantId: 101, restaurantName: 'Spice Garden', restaurantCuisine: 'Indian' },
+      { id: 1003, name: 'Penne Arrabbiata', description: 'Spicy pasta dish made with garlic, tomatoes, and dried red chili peppers.', price: 14.50, category: 'Main Course', restaurantId: 102, restaurantName: 'Pasta Palace', restaurantCuisine: 'Italian' },
+      { id: 1004, name: 'Truffle Mushroom Risotto', description: 'Creamy arborio rice infused with wild mushrooms and white truffle oil.', price: 19.99, category: 'Main Course', restaurantId: 102, restaurantName: 'Pasta Palace', restaurantCuisine: 'Italian' },
+      { id: 1005, name: 'Classic Cheeseburger', description: 'Grilled beef patty, cheddar, lettuce, tomato, house sauce.', price: 11.99, category: 'Burgers', restaurantId: 103, restaurantName: 'Burger Bistro', restaurantCuisine: 'American' },
+      { id: 1007, name: 'Salmon Sashimi (5pcs)', description: 'Slices of premium raw Atlantic salmon, served with wasabi.', price: 15.00, category: 'Sashimi', restaurantId: 104, restaurantName: 'Sushi Zen', restaurantCuisine: 'Japanese' }
     ];
     setMenuCache(mockMenuItems);
   };
@@ -354,27 +355,66 @@ const FloatingAiWidget = () => {
       let matches = [];
       let criteria = '';
 
-      if (lower.includes('spicy') || lower.includes('chili') || lower.includes('pepper')) {
+      if (lower.includes('spicy') || lower.includes('hot') || lower.includes('pepper') || lower.includes('chili')) {
         criteria = 'spicy';
         matches = menuCache.filter(item => 
-          item.name.toLowerCase().includes('spicy') || item.description.toLowerCase().includes('spicy') ||
-          item.name.toLowerCase().includes('chili') || item.name.toLowerCase().includes('arrabbiata')
+          item.name.toLowerCase().includes('spicy') || 
+          item.description.toLowerCase().includes('spicy') ||
+          item.name.toLowerCase().includes('chili') || 
+          item.description.toLowerCase().includes('chili') ||
+          item.name.toLowerCase().includes('arrabbiata')
         );
       } else if (lower.includes('vegan') || lower.includes('veg') || lower.includes('vegetarian')) {
-        criteria = 'vegetarian';
+        criteria = 'vegetarian/vegan';
         matches = menuCache.filter(item => 
-          item.description.toLowerCase().includes('vegan') || item.description.toLowerCase().includes('vegetarian') ||
-          item.name.toLowerCase().includes('naan') || item.name.toLowerCase().includes('risotto')
+          item.description.toLowerCase().includes('vegan') || 
+          item.description.toLowerCase().includes('vegetarian') ||
+          item.name.toLowerCase().includes('naan') || 
+          item.name.toLowerCase().includes('risotto') ||
+          item.category.toLowerCase().includes('bread') ||
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('veg'))
         );
       } else if (lower.includes('budget') || lower.includes('cheap') || lower.includes('under 15')) {
-        criteria = 'budget-friendly';
+        criteria = 'budget-friendly (under $15)';
         matches = menuCache.filter(item => item.price < 15.0);
-      } else if (lower.includes('burger') || lower.includes('american')) {
-        criteria = 'burger';
-        matches = menuCache.filter(item => item.name.toLowerCase().includes('burger') || item.name.toLowerCase().includes('fries'));
-      } else if (lower.includes('italian') || lower.includes('pasta') || lower.includes('risotto')) {
+      } else if (lower.includes('italian') || lower.includes('pasta') || lower.includes('pizza') || lower.includes('risotto')) {
         criteria = 'Italian';
-        matches = menuCache.filter(item => item.name.toLowerCase().includes('penne') || item.name.toLowerCase().includes('risotto'));
+        matches = menuCache.filter(item => 
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('italian')) ||
+          item.restaurantName.toLowerCase().includes('pasta') || 
+          item.name.toLowerCase().includes('penne') || 
+          item.name.toLowerCase().includes('risotto')
+        );
+      } else if (lower.includes('indian') || lower.includes('chicken') || lower.includes('curry') || lower.includes('naan') || lower.includes('biryani')) {
+        criteria = 'Indian cuisine';
+        matches = menuCache.filter(item => 
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('indian')) ||
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('hyderabadi')) ||
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('mughlai')) ||
+          item.restaurantName.toLowerCase().includes('spice') || 
+          item.restaurantName.toLowerCase().includes('biryani') || 
+          item.restaurantName.toLowerCase().includes('mehfil') || 
+          item.name.toLowerCase().includes('chicken') || 
+          item.name.toLowerCase().includes('naan') ||
+          item.name.toLowerCase().includes('biryani') ||
+          item.name.toLowerCase().includes('haleem') ||
+          item.description.toLowerCase().includes('masala')
+        );
+      } else if (lower.includes('burger') || lower.includes('fries') || lower.includes('american')) {
+        criteria = 'burger & fries';
+        matches = menuCache.filter(item => 
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('american')) ||
+          item.name.toLowerCase().includes('burger') || 
+          item.name.toLowerCase().includes('fries')
+        );
+      } else if (lower.includes('sushi') || lower.includes('salmon') || lower.includes('japanese') || lower.includes('sashimi')) {
+        criteria = 'sushi & sashimi';
+        matches = menuCache.filter(item => 
+          (item.restaurantCuisine && item.restaurantCuisine.toLowerCase().includes('japanese')) ||
+          item.name.toLowerCase().includes('roll') || 
+          item.name.toLowerCase().includes('sashimi') ||
+          item.restaurantName.toLowerCase().includes('sushi')
+        );
       }
 
       if (matches.length === 0 && lower.length > 2) {
