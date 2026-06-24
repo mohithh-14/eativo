@@ -16,7 +16,7 @@ import {
   FaTimes,
 } from 'react-icons/fa';
 import { ENABLE_DEMO_FALLBACK, apiFetch } from '../config/api';
-import { getCurrentUser } from '../config/auth';
+import { getCurrentUser, getStoredTasteProfile } from '../config/auth';
 import { saveOrderToHistory } from '../config/orderHistory';
 import { getMenuByRestaurantId, getRestaurantById } from '../data/restaurants';
 
@@ -87,7 +87,10 @@ const Menu = () => {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [deliveryAddress] = useState(() => {
+    const profile = getStoredTasteProfile(getCurrentUser()?.id) || getStoredTasteProfile();
+    return profile?.address || '123 Gourmet Blvd, Foodie City';
+  });
   const [paymentMethod, setPaymentMethod] = useState('UPI');
   const [placingOrder, setPlacingOrder] = useState(false);
   const [orderConfirmed, setOrderConfirmed] = useState(null);
@@ -515,14 +518,14 @@ const Menu = () => {
 
                       <div className="space-y-4">
                         <div>
-                          <label className="mb-1 block text-xs font-semibold text-gray-500 dark:text-slate-400">Delivery address</label>
-                          <textarea
-                            rows="2"
-                            placeholder="Flat or house no., street, landmark"
-                            className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 p-3 text-sm transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
-                            value={deliveryAddress}
-                            onChange={(event) => setDeliveryAddress(event.target.value)}
-                          />
+                          <label className="mb-1 block text-xs font-semibold text-gray-500 dark:text-slate-400">Delivering to</label>
+                          <div className="flex items-start gap-2 rounded-xl border border-gray-100 bg-gray-50 p-3 text-sm leading-relaxed text-gray-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+                            <span className="text-primary shrink-0">📍</span>
+                            <div>
+                              <p className="font-medium">{deliveryAddress}</p>
+                              <span className="text-[10px] text-gray-400 dark:text-slate-500 mt-1 block">To change this address, edit your Taste Profile.</span>
+                            </div>
+                          </div>
                         </div>
 
                         <div>

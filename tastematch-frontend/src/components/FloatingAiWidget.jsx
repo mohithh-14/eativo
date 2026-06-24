@@ -7,7 +7,7 @@ import {
 } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import { apiFetch, ENABLE_DEMO_FALLBACK } from '../config/api';
-import { getCurrentUser } from '../config/auth';
+import { getCurrentUser, getStoredTasteProfile } from '../config/auth';
 
 const FloatingAiWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +26,9 @@ const FloatingAiWidget = () => {
   const [activeOrders, setActiveOrders] = useState([]);
   
   // Order settings
-  const [address, setAddress] = useState('123 Gourmet Blvd, Foodie City');
+  const userProfile = getStoredTasteProfile(currentUser?.id) || getStoredTasteProfile();
+  const deliveryAddress = userProfile?.address || '123 Gourmet Blvd, Foodie City';
+  
   const [paymentMethod] = useState('UPI');
   const [showBasket, setShowBasket] = useState(false);
 
@@ -149,7 +151,7 @@ const FloatingAiWidget = () => {
       const payload = {
         totalAmount: basketTotal,
         paymentMethod: paymentMethod,
-        address: address
+        address: deliveryAddress
       };
 
       const response = await apiFetch(`/api/orders?restaurantId=${basketRestaurantId}`, {
@@ -209,7 +211,7 @@ const FloatingAiWidget = () => {
               orderId: orderId,
               restaurantName: basketRestaurantName,
               total: basketTotal,
-              address: address
+              address: deliveryAddress
             }
           }]);
           setBasket([]);
@@ -685,13 +687,14 @@ const FloatingAiWidget = () => {
                     {/* Form Details */}
                     <div className="space-y-2 border-t border-white/5 pt-3 mb-3 text-[10px]">
                       <div>
-                        <label className="text-[8px] font-mono uppercase text-slate-400 block mb-0.5">Address</label>
-                        <input 
-                          type="text"
-                          value={address}
-                          onChange={(e) => setAddress(e.target.value)}
-                          className="w-full text-xs px-2.5 py-1.5 rounded-lg border border-white/5 bg-slate-900/50 text-white placeholder-slate-500 focus:outline-none focus:border-primary"
-                        />
+                        <span className="text-[8px] font-mono uppercase text-slate-400 block mb-1">Delivering To</span>
+                        <div className="flex items-start gap-1.5 bg-slate-900/50 border border-white/5 p-2.5 rounded-lg text-xs leading-relaxed text-slate-200">
+                          <span className="text-accent shrink-0">📍</span>
+                          <div>
+                            <p>{deliveryAddress}</p>
+                            <span className="text-[9px] text-slate-500 mt-1 block">To change this address, edit your Taste Profile.</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
 

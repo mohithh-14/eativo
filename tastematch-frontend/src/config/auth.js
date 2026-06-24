@@ -130,13 +130,30 @@ export const setHasTasteProfile = (value) => {
   notifyAuthChange();
 };
 
-export const normalizeTasteProfile = (profile) => ({
-  cuisine: profile?.cuisine || 'Hyderabadi',
-  spiceLevel: Number(profile?.spiceLevel ?? 80),
-  dietType: profile?.dietType || 'Non-Veg',
-  budgetRange: profile?.budgetRange || 'Rs 900',
-  ratingImportance: Number(profile?.ratingImportance ?? 4),
-});
+export const normalizeTasteProfile = (profile) => {
+  const storage = typeof window !== 'undefined' ? window.localStorage : null;
+  let cachedAddress = '123 Gourmet Blvd, Foodie City';
+  if (storage) {
+    try {
+      const raw = storage.getItem('userPrefs');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.address) {
+          cachedAddress = parsed.address;
+        }
+      }
+    } catch (e) {}
+  }
+
+  return {
+    cuisine: profile?.cuisine || 'Hyderabadi',
+    spiceLevel: Number(profile?.spiceLevel ?? 80),
+    dietType: profile?.dietType || 'Non-Veg',
+    budgetRange: profile?.budgetRange || 'Rs 900',
+    ratingImportance: Number(profile?.ratingImportance ?? 4),
+    address: profile?.address || cachedAddress,
+  };
+};
 
 export const getStoredTasteProfile = (userId) => {
   const storage = getStorage();

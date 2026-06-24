@@ -22,6 +22,7 @@ const INITIAL_FORM_DATA = {
   dietType: 'Non-Veg',
   budgetRange: 'Rs 900',
   ratingImportance: 4,
+  address: '123 Gourmet Blvd, Foodie City',
 };
 
 const TasteProfile = () => {
@@ -58,31 +59,35 @@ const TasteProfile = () => {
 
       try {
         const response = await apiFetch('/api/profile/me');
+        let loadedProfile = {};
+        if (response.ok) {
+          loadedProfile = await response.json();
+        }
+
+        // Fetch address from database
+        let dbAddress = '';
+        try {
+          const addrResp = await apiFetch('/api/address/me');
+          if (addrResp.ok) {
+            const addrList = await addrResp.json();
+            if (addrList.length > 0) {
+              dbAddress = addrList[0].street;
+            }
+          }
+        } catch (addrErr) {
+          console.error('Error loading address:', addrErr);
+        }
 
         if (isCancelled) return;
 
-        if (response.status === 404) {
-          return;
-        }
-
-        if (response.status === 401 || response.status === 403) {
-          toast.error('Please sign in again');
-          navigate('/register');
-          return;
-        }
-
-        if (!response.ok) {
-          return;
-        }
-
-        const profile = normalizeTasteProfile(await response.json());
+        const profile = normalizeTasteProfile({
+          ...loadedProfile,
+          address: dbAddress || loadedProfile.address
+        });
         setFormData(profile);
         persistTasteProfile(profile);
       } catch (error) {
         console.error('Profile load error:', error);
-        if (!isCancelled) {
-          toast.error('We could not load your saved taste profile. You can still update it below.');
-        }
       } finally {
         if (!isCancelled) {
           setProfileLoading(false);
@@ -134,10 +139,22 @@ const TasteProfile = () => {
         }
         throw new Error(message);
       }
+
+      // Save address to database
+      try {
+        await apiFetch('/api/address/me', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ street: formData.address }),
+        });
+      } catch (addrErr) {
+        console.error('Error saving address to backend:', addrErr);
+      }
     } catch (error) {
       console.error('Profile save error:', error);
       if (!ENABLE_DEMO_FALLBACK) {
         toast.error('Could not save your taste profile. Please try again.');
+        setLoading(false);
         return;
       }
     } finally {
@@ -396,6 +413,25 @@ const TasteProfile = () => {
                       );
                     })}
                   </div>
+                </div>
+
+                {/* 6. DEFAULT DELIVERY ADDRESS (Liquid Glass Input) */}
+                <div className="md:col-span-2 flex flex-col p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+                  <label className="text-xs font-bold tracking-wider uppercase text-slate-300 mb-3 flex items-center gap-2">
+                    <span className="text-accent">📍</span> Default Delivery Address
+                  </label>
+                  <p className="text-[10px] text-slate-400 mb-3 font-medium">
+                    This address will be automatically applied to all your orders across the site and in the AI assistant.
+                  </p>
+                  <input
+                    type="text"
+                    name="address"
+                    value={formData.address || ''}
+                    onChange={(e) => updateField('address', e.target.value)}
+                    placeholder="Enter your street, house/apartment number, and city..."
+                    className="w-full text-xs px-4 py-3.5 rounded-xl border border-white/10 bg-slate-950/40 text-white placeholder-slate-500 focus:outline-none focus:border-primary transition-all focus:ring-1 focus:ring-primary/20 shadow-inner"
+                    required
+                  />
                 </div>
 
               </div>
