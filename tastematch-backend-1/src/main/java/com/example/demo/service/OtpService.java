@@ -5,22 +5,29 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.OtpRequest;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 
 @Service
 public class OtpService {
 
-    private final JavaMailSender mailSender;
+    @Value("${app.sendgrid.api-key:}")
+    private String sendGridApiKey;
+
+    @Value("${app.sendgrid.from-email:no-reply@eativo.com}")
+    private String fromEmail;
+
     private final SecureRandom secureRandom = new SecureRandom();
     private final Map<String, PendingRegistration> otpCache = new ConcurrentHashMap<>();
-
-    public OtpService(@org.springframework.beans.factory.annotation.Autowired(required = false) JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
 
     public static class PendingRegistration {
         private final OtpRequest otpRequest;
@@ -66,22 +73,35 @@ public class OtpService {
                 + "Happy Dining,\n"
                 + "The Eativo Team";
 
-        if (mailSender == null) {
-            System.err.println("WARNING: JavaMailSender is not configured. Fallback: Logging OTP to console.");
+        if (sendGridApiKey == null || sendGridApiKey.trim().isEmpty()) {
+            System.err.println("WARNING: SENDGRID_API_KEY is not configured. Fallback: Logging OTP to console.");
         } else {
             try {
-                SimpleMailMessage message = new SimpleMailMessage();
-                message.setTo(email);
-                message.setSubject(subject);
-                message.setText(text);
-                message.setFrom("no-reply@eativo.com");
-                mailSender.send(message);
-                System.out.println("OTP email sent successfully to: " + email);
+                Email from = new Email(fromEmail);
+                Email to = new Email(email);
+                Content content = new Content("text/plain", text);
+                Mail mail = new Mail(from, subject, to, content);
+
+                SendGrid sg = new SendGrid(sendGridApiKey);
+                Request request = new Request();
+                request.setMethod(Method.POST);
+                request.setEndpoint("mail/send");
+                request.setBody(mail.build());
+                Response response = sg.api(request);
+                
+                System.out.println("SendGrid Email Status: " + response.getStatusCode());
+                if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
+                    System.out.println("OTP email sent successfully to: " + email);
+                } else {
+                    System.err.println("WARNING: SendGrid API returned non-success status: " + response.getStatusCode());
+                    System.err.println("Response Body: " + response.getBody());
+                }
             } catch (Exception e) {
-                System.err.println("WARNING: Could not send real email via SMTP. Fallback: Logging OTP to console.");
+                System.err.println("WARNING: Could not send real email via SendGrid. Fallback: Logging OTP to console.");
                 System.err.println("Email Error details: " + e.getMessage());
             }
         }
+
 
         System.out.println("==================================================");
         System.out.println("   [EATIVO SECURITY LOG] OTP CODE GENERATED");
