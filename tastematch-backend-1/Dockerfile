@@ -11,7 +11,7 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 # Copy the built jar file from the build stage
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/app.jar app.jar
 # Expose default spring boot port
 EXPOSE 8080
 # Run the application

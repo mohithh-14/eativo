@@ -18,7 +18,7 @@ public class OtpService {
     private final SecureRandom secureRandom = new SecureRandom();
     private final Map<String, PendingRegistration> otpCache = new ConcurrentHashMap<>();
 
-    public OtpService(JavaMailSender mailSender) {
+    public OtpService(@org.springframework.beans.factory.annotation.Autowired(required = false) JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
@@ -65,17 +65,21 @@ public class OtpService {
                 + "Happy Dining,\n"
                 + "The Eativo Team";
 
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(email);
-            message.setSubject(subject);
-            message.setText(text);
-            message.setFrom("no-reply@eativo.com");
-            mailSender.send(message);
-            System.out.println("OTP email sent successfully to: " + email);
-        } catch (Exception e) {
-            System.err.println("WARNING: Could not send real email via SMTP. Fallback: Logging OTP to console.");
-            System.err.println("Email Error details: " + e.getMessage());
+        if (mailSender == null) {
+            System.err.println("WARNING: JavaMailSender is not configured. Fallback: Logging OTP to console.");
+        } else {
+            try {
+                SimpleMailMessage message = new SimpleMailMessage();
+                message.setTo(email);
+                message.setSubject(subject);
+                message.setText(text);
+                message.setFrom("no-reply@eativo.com");
+                mailSender.send(message);
+                System.out.println("OTP email sent successfully to: " + email);
+            } catch (Exception e) {
+                System.err.println("WARNING: Could not send real email via SMTP. Fallback: Logging OTP to console.");
+                System.err.println("Email Error details: " + e.getMessage());
+            }
         }
 
         System.out.println("==================================================");
