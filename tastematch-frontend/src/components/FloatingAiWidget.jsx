@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  FaRobot, FaPaperPlane, FaTrash, FaShoppingBasket, 
+  FaRobot, FaPaperPlane, FaShoppingBasket, 
   FaTimes, FaSpinner, FaUtensils, FaBan, 
   FaCheckCircle, FaChevronDown
 } from 'react-icons/fa';
@@ -28,7 +28,7 @@ const FloatingAiWidget = () => {
   
   // Order settings
   const [address, setAddress] = useState('123 Gourmet Blvd, Foodie City');
-  const [paymentMethod, setPaymentMethod] = useState('UPI');
+  const [paymentMethod] = useState('UPI');
   const [showBasket, setShowBasket] = useState(false);
 
   const messagesEndRef = useRef(null);
