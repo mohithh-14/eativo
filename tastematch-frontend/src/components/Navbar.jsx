@@ -45,8 +45,10 @@ const Navbar = ({ theme, onToggleTheme }) => {
     { name: 'For You', path: '/recommendations' },
     ...(currentUser ? [{ name: 'Orders', path: '/orders' }] : []),
     { name: 'Reservations', path: '/reservations' },
+    { name: 'AI Assistant', path: '/assistant' },
     { name: 'Taste Profile', path: '/profile' },
   ];
+
 
   // Make navbar transparent and text white ONLY if we're on the home page and not scrolled
   const isTransparent = location.pathname === '/' && !isScrolled;

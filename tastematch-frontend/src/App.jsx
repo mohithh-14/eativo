@@ -15,6 +15,8 @@ import Restaurants from './pages/Restaurants';
 import RestaurantDetails from './pages/RestaurantDetails';
 import Recommendations from './pages/Recommendations';
 import OrderHistory from './pages/OrderHistory';
+import Assistant from './pages/Assistant';
+
 
 function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
@@ -43,7 +45,9 @@ function App() {
             <Route path="/restaurants/:restaurantId" element={<RestaurantDetails />} />
             <Route path="/reservations" element={<Reservation />} />
             <Route path="/orders" element={<OrderHistory />} />
+            <Route path="/assistant" element={<Assistant />} />
             <Route path="/menu/:restaurantId" element={<Menu />} />
+
           </Routes>
         </main>
         <Footer />
