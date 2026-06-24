@@ -25,15 +25,15 @@ const FloatingAiWidget = () => {
   const [basket, setBasket] = useState([]);
   const [activeOrders, setActiveOrders] = useState([]);
   
+  const messagesEndRef = useRef(null);
+  const currentUser = getCurrentUser();
+
   // Order settings
   const userProfile = getStoredTasteProfile(currentUser?.id) || getStoredTasteProfile();
   const deliveryAddress = userProfile?.address || '123 Gourmet Blvd, Foodie City';
   
   const [paymentMethod] = useState('UPI');
   const [showBasket, setShowBasket] = useState(false);
-
-  const messagesEndRef = useRef(null);
-  const currentUser = getCurrentUser();
 
 
   // Scroll to bottom
