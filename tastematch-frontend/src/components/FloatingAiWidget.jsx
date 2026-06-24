@@ -174,7 +174,7 @@ const FloatingAiWidget = () => {
             orderId: orderRes.id,
             restaurantName: basketRestaurantName,
             total: basketTotal,
-            address: address
+            address: deliveryAddress
           }
         }]);
         setBasket([]);
