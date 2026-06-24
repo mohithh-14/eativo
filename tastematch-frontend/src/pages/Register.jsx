@@ -133,7 +133,18 @@ const Register = () => {
       setOtpValues(['', '', '', '', '', '']);
     } catch (error) {
       console.error('Request OTP error:', error);
-      toast.error(error.message || 'Could not send verification code. Please try again.');
+      if (!ENABLE_DEMO_FALLBACK) {
+        toast.error(error.message || 'Could not send verification code. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      // Demo fallback: simulate sending OTP
+      toast.success('Demo mode: verification code sent! (Use code: 123456)');
+      setShowOtpScreen(true);
+      setTimer(300);
+      setCanResend(false);
+      setOtpValues(['', '', '', '', '', '']);
     } finally {
       setLoading(false);
     }
@@ -174,7 +185,27 @@ const Register = () => {
       navigate('/profile');
     } catch (error) {
       console.error('Verify OTP error:', error);
-      toast.error(error.message || 'Invalid code. Please try again.');
+      if (!ENABLE_DEMO_FALLBACK) {
+        toast.error(error.message || 'Invalid code. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      // Demo fallback: simulate successful verification
+      if (otpCode === '123456' || otpCode === '000000') {
+        saveAuthSession({
+          id: `demo_${Math.random().toString(36).slice(2, 9)}`,
+          name: formData.name.trim() || 'Foodie',
+          email: formData.email.trim(),
+          token: 'demo-session',
+          hasTasteProfile: false,
+        });
+        clearPersistedTasteProfile();
+        toast.success('Demo mode: account verified locally');
+        navigate('/profile');
+      } else {
+        toast.error('Demo mode: invalid code. (Please use 123456 or 000000)');
+      }
     } finally {
       setLoading(false);
     }
@@ -315,7 +346,7 @@ const Register = () => {
                   <button
                     type="button"
                     onClick={() => setShowOtpScreen(false)}
-                    className="btn-secondary py-3 dark:border-slate-700 dark:bg-slate-955 dark:text-white"
+                    className="btn-secondary py-3 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
                   >
                     Back to details
                   </button>
