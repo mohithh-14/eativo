@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaRobot, FaPaperPlane, FaTrash, FaShoppingBasket, 
   FaTimes, FaSpinner, FaUtensils, FaBan, 
-  FaCheckCircle, FaUser, FaVolumeUp, FaMicrophone, FaSearch
+  FaCheckCircle
 } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import { apiFetch, ENABLE_DEMO_FALLBACK } from '../config/api';
@@ -303,11 +303,11 @@ const Assistant = () => {
   ]);
   const [inputText, setInputText] = useState('');
   const [botState, setBotState] = useState('idle'); // idle, listening, thinking, speaking
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState([]); // eslint-disable-line no-unused-vars
   const [menuCache, setMenuCache] = useState([]);
   const [basket, setBasket] = useState([]);
   const [activeOrders, setActiveOrders] = useState([]);
-  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [loadingOrders, setLoadingOrders] = useState(false); // eslint-disable-line no-unused-vars
   
   // Order parameters
   const [address, setAddress] = useState('123 Gourmet Blvd, Foodie City');
@@ -373,6 +373,7 @@ const Assistant = () => {
     };
 
     loadInitData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Helper to load rich fallback mock data

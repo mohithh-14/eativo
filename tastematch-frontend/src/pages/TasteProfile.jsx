@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
-  FaFire, FaHeart, FaLeaf, FaMoneyBillWave, 
-  FaSpinner, FaStar, FaCheck
+  FaSpinner, FaCheck
 } from 'react-icons/fa';
 import { ENABLE_DEMO_FALLBACK, apiFetch } from '../config/api';
 import {
@@ -46,7 +45,6 @@ const RotaryKnob = ({ value, onChange, min = 0, max = 100, label, getSublabel })
   const handleMouseMove = (e) => {
     if (!isDragging.current) return;
     const deltaY = startY.current - e.clientY; // drag up to increase
-    const range = max - min;
     const sensitivity = 0.6; // adjustment speed
     let newValue = startValue.current + (deltaY * sensitivity);
     newValue = Math.max(min, Math.min(max, newValue));
