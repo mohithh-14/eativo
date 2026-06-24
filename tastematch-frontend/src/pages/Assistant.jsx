@@ -1145,7 +1145,7 @@ const Assistant = () => {
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
                           <button 
-                            onClick={() => setBasket(prev => prev.map(i => i.id === item.id ? { ...i, quantity: Math.max(0, i.quantity - 1) }).filter(i => i.quantity > 0))}
+                            onClick={() => setBasket(prev => prev.map(i => i.id === item.id ? { ...i, quantity: Math.max(0, i.quantity - 1) } : i).filter(i => i.quantity > 0))}
                             className="h-6 w-6 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-300 active:scale-95"
                           >
                             -
