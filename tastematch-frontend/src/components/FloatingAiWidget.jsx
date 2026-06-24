@@ -54,24 +54,24 @@ const FloatingAiWidget = () => {
         const resResp = await apiFetch('/api/restaurants');
         if (resResp.ok) {
           const resData = await resResp.json();
-          const allMenuItems = [];
-          for (const rest of resData) {
+          const menuPromises = resData.map(async (rest) => {
             try {
               const menuResp = await apiFetch(`/api/menu/restaurant/${rest.id}`);
               if (menuResp.ok) {
                 const menuData = await menuResp.json();
-                const mapped = menuData.map(item => ({
+                return menuData.map(item => ({
                   ...item,
                   restaurantName: rest.name,
                   restaurantId: rest.id
                 }));
-                allMenuItems.push(...mapped);
               }
             } catch (err) {
               console.error(`Error loading menu:`, err);
             }
-          }
-          setMenuCache(allMenuItems);
+            return [];
+          });
+          const results = await Promise.all(menuPromises);
+          setMenuCache(results.flat());
         } else {
           loadMockData();
         }

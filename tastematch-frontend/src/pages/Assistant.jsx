@@ -337,24 +337,24 @@ const Assistant = () => {
           setRestaurants(resData);
           
           // 2. Fetch menus for all restaurants to build a smart search index
-          const allMenuItems = [];
-          for (const rest of resData) {
+          const menuPromises = resData.map(async (rest) => {
             try {
               const menuResp = await apiFetch(`/api/menu/restaurant/${rest.id}`);
               if (menuResp.ok) {
                 const menuData = await menuResp.json();
-                const mapped = menuData.map(item => ({
+                return menuData.map(item => ({
                   ...item,
                   restaurantName: rest.name,
                   restaurantId: rest.id
                 }));
-                allMenuItems.push(...mapped);
               }
             } catch (err) {
               console.error(`Error loading menu for restaurant ${rest.id}:`, err);
             }
-          }
-          setMenuCache(allMenuItems);
+            return [];
+          });
+          const results = await Promise.all(menuPromises);
+          setMenuCache(results.flat());
         } else {
           // Load fallback mock data if server is unconfigured
           loadMockData();
