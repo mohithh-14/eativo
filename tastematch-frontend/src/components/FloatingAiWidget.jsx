@@ -502,7 +502,7 @@ const FloatingAiWidget = () => {
             initial={{ opacity: 0, y: 30, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.9 }}
-            className="absolute bottom-18 right-0 w-[350px] h-[480px] rounded-3xl overflow-hidden flex flex-col border border-white/20 dark:border-white/10 text-white shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+            className="absolute bottom-16 right-0 w-[350px] h-[480px] rounded-3xl overflow-hidden flex flex-col border border-white/20 dark:border-white/10 text-white shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
             style={{
               background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(30, 41, 59, 0.6) 100%)',
               backdropFilter: 'blur(24px) saturate(180%)',
