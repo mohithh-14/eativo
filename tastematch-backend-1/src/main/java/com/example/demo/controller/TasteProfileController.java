@@ -40,10 +40,10 @@ public class TasteProfileController {
             profile.setUser(user);
         }
 
-        profile.setCuisine(payload.getCuisine().trim());
+        profile.setCuisine(com.example.demo.util.HtmlSanitizer.sanitize(payload.getCuisine()));
         profile.setSpiceLevel(String.valueOf(payload.getSpiceLevel()));
-        profile.setDietType(payload.getDietType().trim());
-        profile.setBudgetRange(payload.getBudgetRange().trim());
+        profile.setDietType(com.example.demo.util.HtmlSanitizer.sanitize(payload.getDietType()));
+        profile.setBudgetRange(com.example.demo.util.HtmlSanitizer.sanitize(payload.getBudgetRange()));
         profile.setRatingImportance(payload.getRatingImportance());
 
         TasteProfile savedProfile = tasteProfileRepository.save(profile);

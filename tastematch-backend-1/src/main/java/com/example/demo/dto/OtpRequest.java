@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class RegisterUserRequest {
+public class OtpRequest {
 
     @NotBlank(message = "Name is required")
     @Size(max = 80, message = "Name must be 80 characters or fewer")

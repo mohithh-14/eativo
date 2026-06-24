@@ -56,7 +56,7 @@ public class OrderController {
         order.setStatus("Preparing");
         order.setTotalAmount(payload.getTotalAmount());
         order.setPaymentMethod(payload.getPaymentMethod());
-        order.setDeliveryAddress(payload.getAddress().trim());
+        order.setDeliveryAddress(com.example.demo.util.HtmlSanitizer.sanitize(payload.getAddress()));
 
         return toResponse(orderRepository.save(order));
     }

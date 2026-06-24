@@ -73,12 +73,15 @@ public class ReservationController {
                 .collect(Collectors.toList());
     }
 
+    @RequireAuth
     @GetMapping("/restaurant/{restaurantId}")
-    public List<ReservationResponse> getRestaurantReservations(@PathVariable Long restaurantId) {
+    public List<ReservationResponse> getRestaurantReservations(HttpServletRequest request, @PathVariable Long restaurantId) {
+        User user = AuthRequestSupport.requireUser(request);
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NoSuchElementException("Restaurant not found"));
 
         return reservationRepository.findByRestaurant(restaurant).stream()
+                .filter(res -> res.getUser() != null && res.getUser().getId().equals(user.getId()))
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }

@@ -8,13 +8,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebAuthConfig implements WebMvcConfigurer {
 
     private final AuthInterceptor authInterceptor;
+    private final RateLimitingInterceptor rateLimitingInterceptor;
 
-    public WebAuthConfig(AuthInterceptor authInterceptor) {
+    public WebAuthConfig(AuthInterceptor authInterceptor, RateLimitingInterceptor rateLimitingInterceptor) {
         this.authInterceptor = authInterceptor;
+        this.rateLimitingInterceptor = rateLimitingInterceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(rateLimitingInterceptor);
         registry.addInterceptor(authInterceptor);
     }
 }
