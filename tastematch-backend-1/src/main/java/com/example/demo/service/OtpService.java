@@ -57,6 +57,7 @@ public class OtpService {
         return otpCode;
     }
 
+    @org.springframework.scheduling.annotation.Async
     public void sendOtpEmail(String email, String otpCode) {
         String subject = "Your Eativo Verification Code";
         String text = "Welcome to Eativo!\n\n"
