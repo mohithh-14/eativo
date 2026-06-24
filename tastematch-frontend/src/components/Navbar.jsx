@@ -45,7 +45,6 @@ const Navbar = ({ theme, onToggleTheme }) => {
     { name: 'For You', path: '/recommendations' },
     ...(currentUser ? [{ name: 'Orders', path: '/orders' }] : []),
     { name: 'Reservations', path: '/reservations' },
-    { name: 'AI Assistant', path: '/assistant' },
     { name: 'Taste Profile', path: '/profile' },
   ];
 
