@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaFire, FaHeart, FaLeaf, FaMoneyBillWave, 
-  FaSpinner, FaStar, FaSlidersH, FaSlidersV, FaCheck
+  FaSpinner, FaStar, FaCheck
 } from 'react-icons/fa';
 import { ENABLE_DEMO_FALLBACK, apiFetch } from '../config/api';
 import {
