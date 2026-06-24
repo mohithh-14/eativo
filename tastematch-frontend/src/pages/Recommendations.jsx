@@ -40,13 +40,8 @@ const Recommendations = () => {
             persistTasteProfile(nextPreferences);
             nextProfileAvailable = true;
           } else if (profileResponse.status === 404) {
-            clearPersistedTasteProfile();
-            nextPreferences = {};
-            nextProfileAvailable = false;
+            nextProfileAvailable = Boolean(Object.keys(nextPreferences).length);
           } else if (profileResponse.status === 401 || profileResponse.status === 403) {
-            clearPersistedTasteProfile();
-            nextPreferences = {};
-            nextProfileAvailable = false;
             recommendationPath = '/api/recommendations/guest';
           }
         }

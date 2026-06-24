@@ -180,7 +180,6 @@ const Register = () => {
       }
 
       saveAuthSession(data);
-      clearPersistedTasteProfile();
       toast.success(`Welcome, ${data.name}! Account verified.`);
       navigate('/profile');
     } catch (error) {
@@ -200,7 +199,6 @@ const Register = () => {
           token: 'demo-session',
           hasTasteProfile: false,
         });
-        clearPersistedTasteProfile();
         toast.success('Demo mode: account verified locally');
         navigate('/profile');
       } else {
@@ -243,8 +241,6 @@ const Register = () => {
 
       if (data.hasTasteProfile) {
         await hydrateTasteProfile();
-      } else {
-        clearPersistedTasteProfile();
       }
 
       toast.success(`Welcome back, ${data.name}!`);
@@ -266,7 +262,6 @@ const Register = () => {
         token: 'demo-session',
         hasTasteProfile: false,
       });
-      clearPersistedTasteProfile();
       toast.success('Demo mode: signed in locally');
       navigate('/profile');
     } finally {

@@ -10,6 +10,7 @@ import { ENABLE_DEMO_FALLBACK, apiFetch } from '../config/api';
 import {
   clearPersistedTasteProfile,
   getCurrentUser,
+  getStoredTasteProfile,
   normalizeTasteProfile,
   persistTasteProfile,
   subscribeToAuthChanges,
@@ -25,7 +26,10 @@ const INITIAL_FORM_DATA = {
 
 const TasteProfile = () => {
   const [currentUser, setCurrentUser] = useState(() => getCurrentUser());
-  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+  const [formData, setFormData] = useState(() => {
+    const cached = getStoredTasteProfile(getCurrentUser()?.id) || getStoredTasteProfile();
+    return cached || INITIAL_FORM_DATA;
+  });
   const [loading, setLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
   const navigate = useNavigate();
@@ -58,20 +62,16 @@ const TasteProfile = () => {
         if (isCancelled) return;
 
         if (response.status === 404) {
-          clearPersistedTasteProfile();
-          setFormData(INITIAL_FORM_DATA);
           return;
         }
 
         if (response.status === 401 || response.status === 403) {
-          clearPersistedTasteProfile();
           toast.error('Please sign in again');
           navigate('/register');
           return;
         }
 
         if (!response.ok) {
-          toast.error('We could not load your saved taste profile. You can still update it below.');
           return;
         }
 
