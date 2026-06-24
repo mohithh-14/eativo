@@ -1152,7 +1152,7 @@ const Assistant = () => {
                           </button>
                           <span className="text-xs font-mono font-bold w-4 text-center">{item.quantity}</span>
                           <button 
-                            onClick={() => setBasket(prev => prev.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 }))}
+                            onClick={() => setBasket(prev => prev.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i))}
                             className="h-6 w-6 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-300 active:scale-95"
                           >
                             +
